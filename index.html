@@ -10,7 +10,8 @@
 </head>
 <body class="scoreboard-page">
   <canvas id="confetti-canvas"></canvas>
-  <div class="container">
+
+  <div class="container" id="main-container">
     <header>
       <h1>AP Physics 1</h1>
       <h2>Bridge Challenge Scoreboard</h2>
@@ -34,6 +35,35 @@
       <p id="empty-msg" class="empty-message">No teams yet. Add teams from the admin portal.</p>
     </div>
   </div>
+
+  <div id="podium-overlay">
+    <canvas id="confetti-canvas-podium"></canvas>
+    <div class="podium-title" id="podium-title">
+      <span class="trophy">&#127942;</span> Final Results <span class="trophy">&#127942;</span>
+    </div>
+    <div class="podium-stage" id="podium-stage">
+      <div class="podium-place place-2" id="place-2">
+        <div class="podium-team-name" id="place-2-name">--</div>
+        <div class="podium-team-details" id="place-2-details"></div>
+        <div class="podium-ratio" id="place-2-ratio">--</div>
+        <div class="podium-block">2</div>
+      </div>
+      <div class="podium-place place-1" id="place-1">
+        <div class="crown">&#128081;</div>
+        <div class="podium-team-name" id="place-1-name">--</div>
+        <div class="podium-team-details" id="place-1-details"></div>
+        <div class="podium-ratio" id="place-1-ratio">--</div>
+        <div class="podium-block">1</div>
+      </div>
+      <div class="podium-place place-3" id="place-3">
+        <div class="podium-team-name" id="place-3-name">--</div>
+        <div class="podium-team-details" id="place-3-details"></div>
+        <div class="podium-ratio" id="place-3-ratio">--</div>
+        <div class="podium-block">3</div>
+      </div>
+    </div>
+  </div>
+
   <script src="js/firebase-config.js"></script>
   <script src="js/confetti.js"></script>
   <script src="js/scoreboard.js"></script>

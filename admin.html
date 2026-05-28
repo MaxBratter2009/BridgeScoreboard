@@ -16,7 +16,16 @@
       <a href="index.html" class="link-to-scoreboard">View Scoreboard &rarr;</a>
     </header>
 
-    <section class="add-team-section">
+    <section class="game-control-section">
+      <h3>Game Control</h3>
+      <p class="game-status" id="game-status">Status: <span class="status-active">Active</span></p>
+      <div id="game-buttons">
+        <button id="end-game-btn" class="btn btn-end-game">&#127942; End Game &amp; Show Podium</button>
+        <button id="restart-game-btn" class="btn btn-restart hidden">&#128260; Restart Game</button>
+      </div>
+    </section>
+
+    <section class="add-team-section" id="add-team-section">
       <h3>Add New Team</h3>
       <form id="add-team-form">
         <div class="form-row">

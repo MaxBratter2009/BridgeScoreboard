@@ -6,6 +6,12 @@ const editModal = document.getElementById('edit-modal');
 const editForm = document.getElementById('edit-team-form');
 const cancelEdit = document.getElementById('cancel-edit');
 const clearAllBtn = document.getElementById('clear-all-btn');
+const endGameBtn = document.getElementById('end-game-btn');
+const restartGameBtn = document.getElementById('restart-game-btn');
+const gameStatusEl = document.getElementById('game-status');
+const addTeamSection = document.getElementById('add-team-section');
+
+const gameStateRef = db.ref('gameState');
 
 function toNewtons(kg) {
   return kg * G;
@@ -21,6 +27,35 @@ function escapeHtml(text) {
   div.textContent = text;
   return div.innerHTML;
 }
+
+gameStateRef.on('value', snap => {
+  const state = snap.val();
+  if (state && state.status === 'ended') {
+    gameStatusEl.innerHTML = 'Status: <span class="status-ended">Game Over - Podium Displayed</span>';
+    endGameBtn.classList.add('hidden');
+    restartGameBtn.classList.remove('hidden');
+    addTeamSection.style.opacity = '0.4';
+    addTeamSection.style.pointerEvents = 'none';
+  } else {
+    gameStatusEl.innerHTML = 'Status: <span class="status-active">Active</span>';
+    endGameBtn.classList.remove('hidden');
+    restartGameBtn.classList.add('hidden');
+    addTeamSection.style.opacity = '1';
+    addTeamSection.style.pointerEvents = 'auto';
+  }
+});
+
+endGameBtn.addEventListener('click', () => {
+  if (confirm('End the game and show the podium on the scoreboard? This will freeze scores.')) {
+    gameStateRef.set({ status: 'ended', endedAt: Date.now() });
+  }
+});
+
+restartGameBtn.addEventListener('click', () => {
+  if (confirm('Restart the game? This will hide the podium and reactivate the scoreboard.')) {
+    gameStateRef.set({ status: 'active' });
+  }
+});
 
 addForm.addEventListener('submit', e => {
   e.preventDefault();
@@ -144,6 +179,7 @@ editModal.addEventListener('click', e => {
 clearAllBtn.addEventListener('click', () => {
   if (confirm('Are you sure you want to delete ALL teams? This cannot be undone.')) {
     teamsRef.remove();
+    gameStateRef.set({ status: 'active' });
   }
 });
 
