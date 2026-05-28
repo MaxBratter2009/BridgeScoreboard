@@ -41,6 +41,17 @@ body {
   z-index: 1000;
 }
 
+/* ===== PODIUM CONFETTI - absolutely positioned, not in flow ===== */
+.podium-confetti-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
 /* ===== LAYOUT ===== */
 .container {
   max-width: 1100px;
@@ -191,46 +202,69 @@ tbody td {
   color: var(--text-dim);
 }
 
-/* ===== ROW ANIMATIONS ===== */
-@keyframes flashGold {
-  0% { background: rgba(255, 215, 0, 0.4); box-shadow: inset 0 0 40px rgba(255, 215, 0, 0.2); }
-  100% { background: transparent; box-shadow: none; }
-}
-
-@keyframes flashUpdate {
-  0% { background: rgba(0, 229, 255, 0.3); box-shadow: inset 0 0 30px rgba(0, 229, 255, 0.15); }
-  100% { background: transparent; box-shadow: none; }
-}
+/* ===== DRAMATIC ROW ANIMATIONS ===== */
 
 @keyframes slamIn {
   0% {
     opacity: 0;
-    transform: translateX(-100%) scale(1.1);
+    transform: translateX(-120%) scale(1.3) rotate(-2deg);
+    filter: blur(4px);
   }
-  40% {
+  30% {
     opacity: 1;
-    transform: translateX(3%) scale(1.02);
+    transform: translateX(5%) scale(1.08) rotate(0.5deg);
+    filter: blur(0);
   }
-  60% {
-    transform: translateX(-1%) scale(1.01);
+  50% {
+    transform: translateX(-3%) scale(1.04) rotate(-0.3deg);
   }
-  80% {
-    transform: translateX(0.5%);
+  70% {
+    transform: translateX(1.5%) scale(1.01);
   }
   100% {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateX(0) scale(1) rotate(0deg);
+    filter: blur(0);
   }
 }
 
-@keyframes newEntryGlow {
+@keyframes entryExplosion {
   0% {
     background: rgba(0, 229, 255, 0);
-    box-shadow: inset 0 0 0px rgba(0, 229, 255, 0);
+    box-shadow: inset 0 0 0 rgba(0, 229, 255, 0), 0 0 0 rgba(0, 229, 255, 0);
   }
-  20% {
-    background: rgba(0, 229, 255, 0.2);
-    box-shadow: inset 0 0 60px rgba(0, 229, 255, 0.15), 0 0 30px rgba(0, 229, 255, 0.2);
+  15% {
+    background: rgba(0, 229, 255, 0.35);
+    box-shadow: inset 0 0 80px rgba(0, 229, 255, 0.2), 0 0 60px rgba(0, 229, 255, 0.4), 0 0 120px rgba(124, 77, 255, 0.2);
+  }
+  40% {
+    background: rgba(124, 77, 255, 0.15);
+    box-shadow: inset 0 0 40px rgba(124, 77, 255, 0.1), 0 0 40px rgba(0, 229, 255, 0.2);
+  }
+  100% {
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
+@keyframes flashGold {
+  0% {
+    background: rgba(255, 215, 0, 0.5);
+    box-shadow: inset 0 0 60px rgba(255, 215, 0, 0.3), 0 0 80px rgba(255, 215, 0, 0.3);
+  }
+  30% {
+    background: rgba(255, 215, 0, 0.3);
+  }
+  100% {
+    background: transparent;
+    box-shadow: none;
+  }
+}
+
+@keyframes flashUpdate {
+  0% {
+    background: rgba(0, 229, 255, 0.35);
+    box-shadow: inset 0 0 50px rgba(0, 229, 255, 0.2), 0 0 40px rgba(0, 229, 255, 0.2);
   }
   100% {
     background: transparent;
@@ -240,18 +274,30 @@ tbody td {
 
 @keyframes rankPulse {
   0% { transform: scale(1); }
-  30% { transform: scale(1.5); }
-  60% { transform: scale(0.9); }
-  100% { transform: scale(1); }
+  20% { transform: scale(1.8) rotate(10deg); }
+  40% { transform: scale(0.7) rotate(-5deg); }
+  60% { transform: scale(1.3) rotate(3deg); }
+  80% { transform: scale(0.95); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 
 @keyframes shakeScreen {
-  0%, 100% { transform: translateX(0); }
-  10% { transform: translateX(-4px) rotate(-0.3deg); }
-  30% { transform: translateX(4px) rotate(0.3deg); }
-  50% { transform: translateX(-3px); }
-  70% { transform: translateX(3px); }
-  90% { transform: translateX(-1px); }
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-8px, -3px) rotate(-0.5deg); }
+  20% { transform: translate(8px, 2px) rotate(0.5deg); }
+  30% { transform: translate(-6px, -4px) rotate(-0.3deg); }
+  40% { transform: translate(6px, 3px) rotate(0.3deg); }
+  50% { transform: translate(-4px, -2px); }
+  60% { transform: translate(4px, 1px); }
+  70% { transform: translate(-3px, -1px); }
+  80% { transform: translate(2px, 1px); }
+  90% { transform: translate(-1px, 0px); }
+}
+
+@keyframes screenFlash {
+  0% { opacity: 0; }
+  10% { opacity: 0.6; }
+  100% { opacity: 0; }
 }
 
 @keyframes slideIn {
@@ -266,19 +312,19 @@ tbody td {
 }
 
 .row-slam-in {
-  animation: slamIn 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: slamIn 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-.row-new-glow {
-  animation: newEntryGlow 2.5s ease-out;
+.row-entry-explosion {
+  animation: entryExplosion 3s ease-out;
 }
 
 .row-flash-gold {
-  animation: flashGold 2s ease-out;
+  animation: flashGold 2.5s ease-out;
 }
 
 .row-flash-update {
-  animation: flashUpdate 1.2s ease-out;
+  animation: flashUpdate 1.5s ease-out;
 }
 
 .row-slide-in {
@@ -286,11 +332,25 @@ tbody td {
 }
 
 .rank-pulse {
-  animation: rankPulse 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: rankPulse 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .screen-shake {
-  animation: shakeScreen 0.5s ease-out;
+  animation: shakeScreen 0.6s ease-out;
+}
+
+/* Full screen white flash overlay */
+#screen-flash {
+  position: fixed;
+  inset: 0;
+  background: white;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 999;
+}
+
+.screen-flash-active {
+  animation: screenFlash 0.6s ease-out !important;
 }
 
 /* ===== TEAM NAME IN SCOREBOARD ===== */
@@ -328,16 +388,12 @@ tbody td {
   display: none !important;
 }
 
-/* ===== PODIUM ===== */
+/* ===== PODIUM OVERLAY ===== */
 #podium-overlay {
   position: fixed;
   inset: 0;
   background: var(--bg-dark);
   z-index: 900;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   opacity: 0;
   pointer-events: none;
   transition: opacity 1s ease;
@@ -348,21 +404,34 @@ tbody td {
   pointer-events: auto;
 }
 
+.podium-content {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .podium-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 4px;
   margin-bottom: 3rem;
   opacity: 0;
-  transform: translateY(-30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transform: scale(0.3);
+  transition: opacity 1s ease, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-shadow: 0 0 40px rgba(255, 215, 0, 0.5), 0 0 80px rgba(255, 215, 0, 0.2);
+  color: var(--gold);
 }
 
 .podium-title.reveal {
   opacity: 1;
-  transform: translateY(0);
+  transform: scale(1);
 }
 
 .podium-title .trophy {
@@ -375,8 +444,7 @@ tbody td {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 1rem;
-  perspective: 800px;
+  gap: 1.5rem;
 }
 
 .podium-place {
@@ -384,8 +452,8 @@ tbody td {
   flex-direction: column;
   align-items: center;
   opacity: 0;
-  transform: translateY(100px) scale(0.8);
-  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(200px) scale(0.5);
+  transition: opacity 1s ease, transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .podium-place.reveal {
@@ -396,7 +464,7 @@ tbody td {
 .podium-team-name {
   font-family: 'Orbitron', sans-serif;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   margin-bottom: 0.5rem;
   text-align: center;
   max-width: 200px;
@@ -405,25 +473,25 @@ tbody td {
 .podium-team-details {
   font-size: 0.85rem;
   color: var(--text-dim);
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.5rem;
   text-align: center;
 }
 
 .podium-ratio {
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
 .podium-block {
-  width: 180px;
+  width: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
-  font-size: 3rem;
+  font-size: 3.5rem;
   border-radius: 12px 12px 0 0;
   position: relative;
   overflow: hidden;
@@ -433,49 +501,60 @@ tbody td {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 60%);
 }
 
 .place-1 .podium-block {
-  height: 220px;
+  height: 240px;
   background: linear-gradient(180deg, #ffd700, #b8960f);
   color: #3d2e00;
-  box-shadow: 0 0 50px rgba(255, 215, 0, 0.4), 0 0 100px rgba(255, 215, 0, 0.2);
+  box-shadow: 0 0 60px rgba(255, 215, 0, 0.5), 0 0 120px rgba(255, 215, 0, 0.25);
 }
 
-.place-1 .podium-team-name { color: var(--gold); }
-.place-1 .podium-ratio { color: var(--gold); }
+.place-1 .podium-team-name {
+  color: var(--gold);
+  font-size: 1.5rem;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.place-1 .podium-ratio {
+  color: var(--gold);
+  text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
 
 .place-2 .podium-block {
-  height: 160px;
+  height: 170px;
   background: linear-gradient(180deg, #e0e0e0, #808080);
   color: #2a2a2a;
-  box-shadow: 0 0 40px rgba(192, 192, 192, 0.3);
+  box-shadow: 0 0 40px rgba(192, 192, 192, 0.35);
 }
 
 .place-2 .podium-team-name { color: var(--silver); }
 .place-2 .podium-ratio { color: var(--silver); }
 
 .place-3 .podium-block {
-  height: 110px;
+  height: 120px;
   background: linear-gradient(180deg, #cd7f32, #8b5a1e);
   color: #2a1a00;
-  box-shadow: 0 0 30px rgba(205, 127, 50, 0.3);
+  box-shadow: 0 0 30px rgba(205, 127, 50, 0.35);
 }
 
 .place-3 .podium-team-name { color: var(--bronze); }
 .place-3 .podium-ratio { color: var(--bronze); }
 
 @keyframes crownBounce {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-8px) rotate(-5deg); }
-  75% { transform: translateY(-8px) rotate(5deg); }
+  0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+  15% { transform: translateY(-15px) rotate(-8deg) scale(1.1); }
+  30% { transform: translateY(-5px) rotate(8deg) scale(1.05); }
+  50% { transform: translateY(-12px) rotate(-5deg) scale(1.1); }
+  70% { transform: translateY(-3px) rotate(5deg) scale(1.05); }
 }
 
 .crown {
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin-bottom: 0.5rem;
   animation: crownBounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6));
 }
 
 @keyframes shimmer {
@@ -484,12 +563,21 @@ tbody td {
 }
 
 .place-1 .podium-team-name {
-  background: linear-gradient(90deg, #ffd700, #fff6a0, #ffd700);
+  background: linear-gradient(90deg, #ffd700, #fff6a0, #ffd700, #fff6a0, #ffd700);
   background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 3s linear infinite;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes podiumGlow {
+  0%, 100% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.4), 0 0 120px rgba(255, 215, 0, 0.2); }
+  50% { box-shadow: 0 0 80px rgba(255, 215, 0, 0.6), 0 0 160px rgba(255, 215, 0, 0.3); }
+}
+
+.place-1.reveal .podium-block {
+  animation: podiumGlow 2s ease-in-out infinite;
 }
 
 /* ===== ADMIN PAGE ===== */
@@ -735,10 +823,11 @@ input::placeholder {
   .rank-badge { width: 28px; height: 28px; font-size: 0.75rem; }
   .team-name { font-size: 0.95rem; }
   .ratio-value { font-size: 0.95rem; }
-  .podium-block { width: 120px; font-size: 2rem; }
-  .place-1 .podium-block { height: 160px; }
-  .place-2 .podium-block { height: 120px; }
-  .place-3 .podium-block { height: 80px; }
+  .podium-block { width: 130px; font-size: 2.5rem; }
+  .place-1 .podium-block { height: 180px; }
+  .place-2 .podium-block { height: 130px; }
+  .place-3 .podium-block { height: 90px; }
   .podium-title { font-size: 2rem; }
   .podium-team-name { font-size: 1rem; }
+  .podium-stage { gap: 0.8rem; }
 }

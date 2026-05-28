@@ -4,6 +4,7 @@ const emptyMsg = document.getElementById('empty-msg');
 const mainContainer = document.getElementById('main-container');
 const scoreboardWrapper = document.getElementById('scoreboard-wrapper');
 const podiumOverlay = document.getElementById('podium-overlay');
+const screenFlash = document.getElementById('screen-flash');
 
 let previousRanking = [];
 let previousData = {};
@@ -28,6 +29,20 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.textContent = text;
   return div.innerHTML;
+}
+
+function triggerScreenFlash() {
+  screenFlash.classList.remove('screen-flash-active');
+  void screenFlash.offsetWidth;
+  screenFlash.classList.add('screen-flash-active');
+  setTimeout(() => screenFlash.classList.remove('screen-flash-active'), 700);
+}
+
+function triggerScreenShake() {
+  scoreboardWrapper.classList.remove('screen-shake');
+  void scoreboardWrapper.offsetWidth;
+  scoreboardWrapper.classList.add('screen-shake');
+  setTimeout(() => scoreboardWrapper.classList.remove('screen-shake'), 700);
 }
 
 function buildRow(team, rank, animate) {
@@ -116,25 +131,25 @@ function renderScoreboard(snapshot) {
 
       if (isNew) {
         tr.classList.add('row-slam-in');
+        triggerScreenFlash();
+        triggerScreenShake();
+
         tr.addEventListener('animationend', () => {
           tr.classList.remove('row-slam-in');
-          tr.classList.add('row-new-glow');
+          tr.classList.add('row-entry-explosion');
         }, { once: true });
 
-        const wrapper = document.getElementById('scoreboard-wrapper');
-        wrapper.classList.add('screen-shake');
-        setTimeout(() => wrapper.classList.remove('screen-shake'), 500);
+        launchConfetti(3000);
 
-        launchConfetti(2000);
+        if (rank === 1) {
+          setTimeout(() => launchConfetti(2000), 1500);
+        }
       } else if (dataChanged) {
         tr.classList.add('row-flash-update');
         const badge = tr.querySelector('.rank-badge');
         if (badge) badge.classList.add('rank-pulse');
-
-        const prevRank = previousRanking.indexOf(team.id);
-        if (prevRank !== i) {
-          launchConfetti(1500);
-        }
+        triggerScreenShake();
+        launchConfetti(1500);
       } else {
         const prevRank = previousRanking.indexOf(team.id);
         if (prevRank !== -1 && prevRank !== i) {
@@ -148,8 +163,14 @@ function renderScoreboard(snapshot) {
 
   if (newLeader) {
     const firstRow = tbody.querySelector('tr');
-    if (firstRow) firstRow.classList.add('row-flash-gold');
-    launchConfetti(4000);
+    if (firstRow) {
+      firstRow.classList.add('row-flash-gold');
+      const badge = firstRow.querySelector('.rank-badge');
+      if (badge) badge.classList.add('rank-pulse');
+    }
+    triggerScreenFlash();
+    launchConfetti(5000);
+    setTimeout(() => launchConfetti(3000), 2000);
   }
 
   previousRanking = currentRanking;
@@ -183,7 +204,7 @@ function showPodium(snapshot) {
       { el: 'place-1', idx: 0 },
     ];
 
-    places.forEach((place, i) => {
+    places.forEach((place) => {
       const team = teams[place.idx];
       const nameEl = document.getElementById(`${place.el}-name`);
       const detailsEl = document.getElementById(`${place.el}-details`);
@@ -198,28 +219,36 @@ function showPodium(snapshot) {
         nameEl.textContent = '--';
         detailsEl.textContent = '';
         ratioEl.textContent = '--';
-        document.getElementById(place.el).style.opacity = '0.3';
+        document.getElementById(place.el).style.visibility = 'hidden';
       }
     });
 
+    // Title drops in
     setTimeout(() => {
       document.getElementById('podium-title').classList.add('reveal');
-    }, 400);
+    }, 500);
 
+    // 3rd place rises up
     setTimeout(() => {
       document.getElementById('place-3').classList.add('reveal');
-      launchFireworks(2000, 'confetti-canvas-podium');
-    }, 1500);
+      launchFireworks(2500, 'confetti-canvas-podium');
+    }, 2000);
 
+    // 2nd place rises up
     setTimeout(() => {
       document.getElementById('place-2').classList.add('reveal');
-      launchFireworks(2500, 'confetti-canvas-podium');
-    }, 3000);
+      launchFireworks(3000, 'confetti-canvas-podium');
+    }, 4000);
 
+    // 1st place - the big reveal
     setTimeout(() => {
       document.getElementById('place-1').classList.add('reveal');
-      launchFireworks(6000, 'confetti-canvas-podium');
-    }, 5000);
+      launchFireworks(8000, 'confetti-canvas-podium');
+      // Second wave of fireworks
+      setTimeout(() => launchFireworks(5000, 'confetti-canvas-podium'), 3000);
+      // Third wave
+      setTimeout(() => launchFireworks(4000, 'confetti-canvas-podium'), 6000);
+    }, 6500);
 
   }, 1000);
 }
@@ -240,6 +269,9 @@ gameStateRef.on('value', snap => {
     document.getElementById('place-1').classList.remove('reveal');
     document.getElementById('place-2').classList.remove('reveal');
     document.getElementById('place-3').classList.remove('reveal');
+    document.getElementById('place-1').style.visibility = '';
+    document.getElementById('place-2').style.visibility = '';
+    document.getElementById('place-3').style.visibility = '';
     isFirstLoad = true;
     previousRanking = [];
     previousData = {};

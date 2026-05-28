@@ -10,6 +10,7 @@
 </head>
 <body class="scoreboard-page">
   <canvas id="confetti-canvas"></canvas>
+  <div id="screen-flash"></div>
 
   <div class="container" id="main-container">
     <header>
@@ -37,10 +38,11 @@
   </div>
 
   <div id="podium-overlay">
-    <canvas id="confetti-canvas-podium"></canvas>
-    <div class="podium-title" id="podium-title">
-      <span class="trophy">&#127942;</span> Final Results <span class="trophy">&#127942;</span>
-    </div>
+    <canvas id="confetti-canvas-podium" class="podium-confetti-canvas"></canvas>
+    <div class="podium-content">
+      <div class="podium-title" id="podium-title">
+        <span class="trophy">&#127942;</span> Final Results <span class="trophy">&#127942;</span>
+      </div>
     <div class="podium-stage" id="podium-stage">
       <div class="podium-place place-2" id="place-2">
         <div class="podium-team-name" id="place-2-name">--</div>
@@ -61,6 +63,7 @@
         <div class="podium-ratio" id="place-3-ratio">--</div>
         <div class="podium-block">3</div>
       </div>
+    </div>
     </div>
   </div>
 
