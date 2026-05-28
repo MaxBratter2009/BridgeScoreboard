@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bridge Challenge - Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+</head>
+<body class="admin-page">
+  <div class="container">
+    <header>
+      <h1>Bridge Challenge</h1>
+      <h2>Admin Portal</h2>
+      <a href="index.html" class="link-to-scoreboard">View Scoreboard &rarr;</a>
+    </header>
+
+    <section class="add-team-section">
+      <h3>Add New Team</h3>
+      <form id="add-team-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="team-name">Team Name</label>
+            <input type="text" id="team-name" required placeholder="e.g. The Newtons">
+          </div>
+          <div class="form-group">
+            <label for="team-period">Period</label>
+            <input type="number" id="team-period" required placeholder="e.g. 3" min="1" max="12">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="bridge-weight">Bridge Weight (kg)</label>
+            <input type="number" id="bridge-weight" step="0.001" min="0" placeholder="e.g. 0.5">
+          </div>
+          <div class="form-group">
+            <label for="held-weight">Weight Held (kg)</label>
+            <input type="number" id="held-weight" step="0.001" min="0" placeholder="e.g. 15.0">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Team</button>
+      </form>
+    </section>
+
+    <section class="teams-section">
+      <h3>All Teams</h3>
+      <table id="teams-table">
+        <thead>
+          <tr>
+            <th>Team</th>
+            <th>Period</th>
+            <th>Bridge (kg)</th>
+            <th>Held (kg)</th>
+            <th>Bridge (N)</th>
+            <th>Held (N)</th>
+            <th>Ratio</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="teams-body">
+        </tbody>
+      </table>
+      <p id="empty-admin-msg" class="empty-message">No teams added yet.</p>
+    </section>
+
+    <section class="danger-zone">
+      <button id="clear-all-btn" class="btn btn-danger">Clear All Teams</button>
+    </section>
+  </div>
+
+  <div id="edit-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Edit Team</h3>
+      <form id="edit-team-form">
+        <input type="hidden" id="edit-team-id">
+        <div class="form-group">
+          <label for="edit-name">Team Name</label>
+          <input type="text" id="edit-name" required>
+        </div>
+        <div class="form-group">
+          <label for="edit-period">Period</label>
+          <input type="number" id="edit-period" required min="1" max="12">
+        </div>
+        <div class="form-group">
+          <label for="edit-bridge-weight">Bridge Weight (kg)</label>
+          <input type="number" id="edit-bridge-weight" step="0.001" min="0">
+        </div>
+        <div class="form-group">
+          <label for="edit-held-weight">Weight Held (kg)</label>
+          <input type="number" id="edit-held-weight" step="0.001" min="0">
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="button" id="cancel-edit" class="btn btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

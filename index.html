@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bridge Challenge Scoreboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+</head>
+<body class="scoreboard-page">
+  <canvas id="confetti-canvas"></canvas>
+  <div class="container">
+    <header>
+      <h1>AP Physics 1</h1>
+      <h2>Bridge Challenge Scoreboard</h2>
+      <p class="subtitle">g = 10 m/s&sup2;</p>
+    </header>
+    <div id="scoreboard-wrapper">
+      <table id="scoreboard">
+        <thead>
+          <tr>
+            <th class="rank-col">#</th>
+            <th class="team-col">Team</th>
+            <th class="period-col">Period</th>
+            <th class="weight-col">Bridge Weight (N)</th>
+            <th class="weight-col">Held Weight (N)</th>
+            <th class="ratio-col">Ratio</th>
+          </tr>
+        </thead>
+        <tbody id="scoreboard-body">
+        </tbody>
+      </table>
+      <p id="empty-msg" class="empty-message">No teams yet. Add teams from the admin portal.</p>
+    </div>
+  </div>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/scoreboard.js"></script>
+</body>
+</html>
